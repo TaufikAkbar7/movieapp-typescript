@@ -23,7 +23,7 @@ const Home: FC = () => {
     }
 
     const getPopularMovies = async (): Promise<void> => {
-        await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEYS}&language=en-US&page=1`)
+        await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEYS}&language=en-US&page=1`)
             .then((res: AxiosResponse) => {
                 setIsLoading(false)
                 setPopularMovie(res['data']['results'])
@@ -82,8 +82,8 @@ const Home: FC = () => {
                                 ))}
                             </Carousel>
 
-                            <div style={{ padding: '30px 50px', background: 'red' }}>
-                                <Title title="Popular movies" subtitle="This month popular movies" />
+                            <div style={{ padding: '30px 50px' }}>
+                                <Title title="Top Rated movies" subtitle="This month top rated movies" />
                                 <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
                                 {popularMovie.map((movie: IMovie, i) => (
                                     <Col 

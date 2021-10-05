@@ -1,11 +1,18 @@
-import { Menu } from 'antd';
+import { Menu, Input, Row, Col } from 'antd';
+
+const { Search } = Input;
 
 const Navbar = () => {
     return (
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
+        <Menu theme="dark" mode="horizontal">
+            <Row align="middle" style={{ width: '100%' }}>
+                <Col span={8}>
+                    <h1 style={{ color: '#FFF', fontWeight: 'bold' }}>Movie App</h1>
+                </Col>
+                <Col span={8} offset={8}>
+                    <Search style={{ width: 350, marginTop: 10 }} placeholder="input search text" onSearch={() => console.log('click')} enterButton />
+                </Col>
+            </Row>
         </Menu>
     )
 }
