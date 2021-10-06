@@ -7,6 +7,9 @@ import {
 } from "react-router-dom";
 import routes from './config/routes';
 import './App.css';
+// Import css files
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const App: FC = () => {
 

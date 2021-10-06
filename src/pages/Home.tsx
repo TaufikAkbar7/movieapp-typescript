@@ -1,17 +1,27 @@
-import { FC, useState, useEffect } from 'react'
-import { Navbar, Title, FooterComp } from '../components'
-import { Layout, Carousel, Image, Card, Spin, Row, Col } from 'antd'
+import { FC, useState, useEffect, ChangeEvent } from 'react'
+import { Navbar, Title, FooterComp, Cards, Gap } from '../components'
+import { Layout, Carousel, Image, Spin } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 import { IMovie } from '../interfaces'
+import Slider from "react-slick";
 
 const { Header, Content, Footer } = Layout
-const { Meta } = Card;
 
 const Home: FC = () => {
     const [movieCarousel, setMovieCarousel] = useState([])
-    const [popularMovie, setPopularMovie] = useState([])
+    const [topRatedMovies, setTopRatedMovies] = useState([])
+    const [popularMovies, setPopularMovies] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [search, setSearch] = useState('')
     const API_KEYS: string = 'f9dd5df9725e62f424981dc7b38f6183'
+
+    const settings: object = {
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 5,
+        slidesToScroll: 5
+    };
 
     const getMovieCarousel = async (): Promise<void> => {
         await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEYS}&language=en-US&page=1`)
@@ -22,29 +32,50 @@ const Home: FC = () => {
             .catch(err => console.log(err))
     }
 
-    const getPopularMovies = async (): Promise<void> => {
+    const getTopRatedMovies = async (): Promise<void> => {
         await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEYS}&language=en-US&page=1`)
             .then((res: AxiosResponse) => {
                 setIsLoading(false)
-                setPopularMovie(res['data']['results'])
+                setTopRatedMovies(res['data']['results'])
             })
             .catch(err => console.log(err))
     }
 
+    const getPopularMovies = async (): Promise<void> => {
+        await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEYS}&language=en-US&page=1`)
+            .then((res: AxiosResponse) => {
+                setIsLoading(false)
+                setPopularMovies(res['data']['results'])
+            })
+            .catch(err => console.log(err))
+    }
+
+    const onSearch = (): void => {
+        axios.get(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEYS}&language=en-US&page=1&query=${search}&include_adult=true`)
+            .then((res: AxiosResponse) => {
+                console.log(res)
+            })
+            .catch(err => console.log(err))
+    }
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        setSearch(e.target.value)
+    }
+
     useEffect(() => {
         getMovieCarousel();
+        getTopRatedMovies();
         getPopularMovies();
     }, [])
 
-    console.log(movieCarousel)
     return (
         <Layout>
             <Header>
-                <Navbar />
+                <Navbar search={search} handleChange={handleChange} onSearch={onSearch} />
             </Header>
-            <Content>
+            <Content style={{background: '#001529'}}>
                 <>
-                    {movieCarousel && popularMovie ? (
+                    {movieCarousel && topRatedMovies && popularMovies ? (
                         <>
                             <Carousel autoplay={true} dots={false}>
                                 {movieCarousel.map((movie: IMovie, i) => (
@@ -81,28 +112,20 @@ const Home: FC = () => {
                                     </div>
                                 ))}
                             </Carousel>
-
                             <div style={{ padding: '30px 50px' }}>
                                 <Title title="Top Rated movies" subtitle="This month top rated movies" />
-                                <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-                                {popularMovie.map((movie: IMovie, i) => (
-                                    <Col 
-                                        key={i} 
-                                        span={6}
-                                        style={{
-                                            padding: '8px 25px'
-                                        }}
-                                    >
-                                    <Card
-                                        hoverable
-                                        style={{ width: 240 }}
-                                        cover={<img alt="example" src={`http://image.tmdb.org/t/p/w1280${movie.backdrop_path}`} />}
-                                    >
-                                        <Meta title={movie.title} description="www.instagram.com" />
-                                    </Card>
-                                    </Col>
-                                ))}
-                                </Row>
+                                <Slider {...settings}>
+                                    {topRatedMovies.map((movie: IMovie) => (
+                                        <Cards movie={movie}/>
+                                    ))}
+                                </Slider>
+                                <Gap width={0} height={50}/>
+                                <Title title="Popular movies" subtitle="This month popular movies" />
+                                <Slider {...settings}>
+                                    {popularMovies.map((movie: IMovie) => (
+                                        <Cards movie={movie}/>
+                                    ))}
+                                </Slider>
                             </div>
                         </>
                     ) : isLoading ? (
@@ -112,7 +135,7 @@ const Home: FC = () => {
                     )}
                 </>
             </Content>
-            <Footer>
+            <Footer style={{background: '#001529'}}>
                 <FooterComp />
             </Footer>
         </Layout>
