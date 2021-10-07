@@ -19,7 +19,7 @@ const Navbar: FC<INavbar> = ({ search, onSearch, handleChange }) => {
                         }} 
                     value={search} 
                     onChange={handleChange} 
-                    placeholder="input search text" 
+                    placeholder="search..." 
                     onSearch={() => onSearch(search)} 
                     enterButton 
                     />

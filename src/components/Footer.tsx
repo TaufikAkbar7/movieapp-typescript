@@ -8,7 +8,7 @@ const FooterComp = () => {
          background: '#001529', 
          color: '#FFF' 
         }}>
-            Ant Design ©2018 Created by Ant UED</Footer>
+            Movie App ©2021 Created by Taufik Akbar</Footer>
 }
 
 export default FooterComp

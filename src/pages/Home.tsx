@@ -3,17 +3,27 @@ import { Navbar, Title, FooterComp, Cards, Gap } from '../components'
 import { Layout, Carousel, Image, Spin } from 'antd'
 import axios, { AxiosResponse } from 'axios'
 import { IMovie } from '../interfaces'
-import Slider from "react-slick";
+import Slider from 'react-slick';
+import {
+    getMovieCarouselAction,
+    getPopularMovieAction,
+    getTopRatedMovieAction
+} from '../config/redux/action/movie'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../config/redux/store'
+import API_KEYS from '../config/api'
 
 const { Header, Content, Footer } = Layout
 
 const Home: FC = () => {
-    const [movieCarousel, setMovieCarousel] = useState([])
-    const [topRatedMovies, setTopRatedMovies] = useState([])
-    const [popularMovies, setPopularMovies] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
     const [search, setSearch] = useState('')
-    const API_KEYS: string = 'f9dd5df9725e62f424981dc7b38f6183'
+    const movieCarousel = useSelector((state: RootState) => state.movieCarousel)
+    const { loading, movies: carouselMovies, error } = movieCarousel
+    const popularMovie = useSelector((state: RootState) => state.popularMovie)
+    const { movies: popularMovies } = popularMovie
+    const topRatedMovie = useSelector((state: RootState) => state.topRatedMovie)
+    const { movies: topRatedMovies } = topRatedMovie
+    const dispatch = useDispatch()
 
     const settings: object = {
         dots: false,
@@ -22,33 +32,6 @@ const Home: FC = () => {
         slidesToShow: 5,
         slidesToScroll: 5
     };
-
-    const getMovieCarousel = async (): Promise<void> => {
-        await axios.get(`https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEYS}&language=en-US&page=1`)
-            .then((res: AxiosResponse) => {
-                setIsLoading(false)
-                setMovieCarousel(res['data']['results'])
-            })
-            .catch(err => console.log(err))
-    }
-
-    const getTopRatedMovies = async (): Promise<void> => {
-        await axios.get(`https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEYS}&language=en-US&page=1`)
-            .then((res: AxiosResponse) => {
-                setIsLoading(false)
-                setTopRatedMovies(res['data']['results'])
-            })
-            .catch(err => console.log(err))
-    }
-
-    const getPopularMovies = async (): Promise<void> => {
-        await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEYS}&language=en-US&page=1`)
-            .then((res: AxiosResponse) => {
-                setIsLoading(false)
-                setPopularMovies(res['data']['results'])
-            })
-            .catch(err => console.log(err))
-    }
 
     const onSearch = (): void => {
         axios.get(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEYS}&language=en-US&page=1&query=${search}&include_adult=true`)
@@ -63,23 +46,23 @@ const Home: FC = () => {
     }
 
     useEffect(() => {
-        getMovieCarousel();
-        getTopRatedMovies();
-        getPopularMovies();
+        dispatch(getMovieCarouselAction())
+        dispatch(getPopularMovieAction())
+        dispatch(getTopRatedMovieAction())
     }, [])
 
     return (
-        <Layout>
-            <Header>
-                <Navbar search={search} handleChange={handleChange} onSearch={onSearch} />
-            </Header>
-            <Content style={{background: '#001529'}}>
-                <>
-                    {movieCarousel && topRatedMovies && popularMovies ? (
+        <>
+            {carouselMovies && topRatedMovies && popularMovies ? (
+                <Layout>
+                    <Header>
+                        <Navbar search={search} handleChange={handleChange} onSearch={onSearch} />
+                    </Header>
+                    <Content style={{ background: '#001529' }}>
                         <>
                             <Carousel autoplay={true} dots={false}>
-                                {movieCarousel.map((movie: IMovie, i) => (
-                                    <div style={{ position: 'relative' }} key={i}>
+                                {carouselMovies.map((movie: IMovie) => (
+                                    <div style={{ position: 'relative' }} key={movie.id}>
                                         <Image style={{ objectFit: 'cover' }} width={1350} src={`http://image.tmdb.org/t/p/w1280${movie.backdrop_path}`} />
                                         <div style={{
                                             position: 'absolute',
@@ -116,30 +99,29 @@ const Home: FC = () => {
                                 <Title title="Top Rated movies" subtitle="This month top rated movies" />
                                 <Slider {...settings}>
                                     {topRatedMovies.map((movie: IMovie) => (
-                                        <Cards movie={movie}/>
+                                        <Cards movie={movie} />
                                     ))}
                                 </Slider>
-                                <Gap width={0} height={50}/>
+                                <Gap width={0} height={50} />
                                 <Title title="Popular movies" subtitle="This month popular movies" />
                                 <Slider {...settings}>
                                     {popularMovies.map((movie: IMovie) => (
-                                        <Cards movie={movie}/>
+                                        <Cards movie={movie} />
                                     ))}
                                 </Slider>
                             </div>
                         </>
-                    ) : isLoading ? (
-                        <Spin />
-                    ) : (
-                        console.log('error')
-                    )}
-                </>
-            </Content>
-            <Footer style={{background: '#001529'}}>
-                <FooterComp />
-            </Footer>
-        </Layout>
+                    </Content>
+                    <Footer style={{ background: '#001529' }}>
+                        <FooterComp />
+                    </Footer>
+                </Layout>
+            ) : loading ? (
+                <Spin />
+            ) : (
+                console.log(error)
+            )}
+        </>
     )
 }
-
 export default Home
