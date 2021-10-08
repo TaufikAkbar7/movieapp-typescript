@@ -1,3 +1,5 @@
 import Home from "./Home";
 import DetailMovie from "./DetailMovie";
-export { Home, DetailMovie };
+import SearchMovie from "./SearchMovie";
+
+export { Home, DetailMovie, SearchMovie };

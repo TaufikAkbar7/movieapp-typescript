@@ -1,5 +1,5 @@
 import { IRoute } from "../interfaces";
-import { Home, DetailMovie } from "../pages";
+import { Home, DetailMovie, SearchMovie } from "../pages";
 
 const routes: IRoute[] = [
     {
@@ -13,7 +13,13 @@ const routes: IRoute[] = [
         name: 'DetailMovie',
         component: DetailMovie,
         exact: true
-    }
+    },
+    {
+        path: '/search/:name',
+        name: 'SearchMovie',
+        component: SearchMovie,
+        exact: true
+    },
 ]
 
 export default routes

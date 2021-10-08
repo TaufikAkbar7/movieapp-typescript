@@ -45,3 +45,16 @@ export const topRatedMovieReducer = (state: object = initialState, action: Actio
             return state
     }
 }
+
+export const searchMovieReducer = (state: object = initialState, action: Action): any => {
+    switch (action.type){
+        case ActionType.SEARCH_MOVIE_REQUEST:
+            return { loading: true }
+        case ActionType.SEARCH_MOVIE_SUCCESS:
+            return { loading: false, movies: action.payload }
+        case ActionType.SEARCH_MOVIE_FAIL:
+            return { loading: false, error: action.payload }
+        default:
+            return state
+    }
+}

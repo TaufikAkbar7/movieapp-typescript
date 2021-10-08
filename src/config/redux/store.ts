@@ -3,7 +3,8 @@ import thunk from 'redux-thunk'
 import { 
     movieCarouselReducer, 
     popularMovieReducer, 
-    topRatedMovieReducer 
+    topRatedMovieReducer,
+    searchMovieReducer 
 } from './reducers'
 
 declare global {
@@ -15,7 +16,8 @@ declare global {
 const reducers = combineReducers({
     movieCarousel: movieCarouselReducer,
     popularMovie: popularMovieReducer,
-    topRatedMovie: topRatedMovieReducer
+    topRatedMovie: topRatedMovieReducer,
+    searchMovie: searchMovieReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

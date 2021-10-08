@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, ChangeEvent } from 'react'
 import { Navbar, Title, FooterComp, Cards, Gap } from '../components'
 import { Layout, Carousel, Image, Spin } from 'antd'
-import axios, { AxiosResponse } from 'axios'
 import { IMovie } from '../interfaces'
 import Slider from 'react-slick';
 import {
@@ -11,7 +10,7 @@ import {
 } from '../config/redux/action/movie'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../config/redux/store'
-import API_KEYS from '../config/api'
+import { useHistory } from 'react-router';
 
 const { Header, Content, Footer } = Layout
 
@@ -24,6 +23,7 @@ const Home: FC = () => {
     const topRatedMovie = useSelector((state: RootState) => state.topRatedMovie)
     const { movies: topRatedMovies } = topRatedMovie
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const settings: object = {
         dots: false,
@@ -34,11 +34,7 @@ const Home: FC = () => {
     };
 
     const onSearch = (): void => {
-        axios.get(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEYS}&language=en-US&page=1&query=${search}&include_adult=true`)
-            .then((res: AxiosResponse) => {
-                console.log(res)
-            })
-            .catch(err => console.log(err))
+        history.push(`/search/${search}`)
     }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -49,7 +45,7 @@ const Home: FC = () => {
         dispatch(getMovieCarouselAction())
         dispatch(getPopularMovieAction())
         dispatch(getTopRatedMovieAction())
-    }, [])
+    }, [dispatch])
 
     return (
         <>
@@ -83,7 +79,7 @@ const Home: FC = () => {
                                                     fontWeight: 'bold',
                                                     fontSize: 34
                                                 }}>
-                                                    {movie.title}</h1>
+                                                    {movie.original_name ? movie.original_name : movie.original_title}</h1>
                                                 <p style={{
                                                     color: '#FFF',
                                                     fontSize: 20,

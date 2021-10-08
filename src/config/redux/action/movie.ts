@@ -27,3 +27,11 @@ export const getPopularMovieAction = () => async (dispatch: Dispatch<Action>): P
     .then((res: AxiosResponse) => dispatch({ type: ActionType.MOVIE_POPULAR_SUCCESS, payload: res['data']['results'] }))
     .catch(err => dispatch({ type: ActionType.MOVIE_POPULAR_FAIL, payload: err }))
 }
+
+export const getMovieBySearch = (search: string) => async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch({ type: ActionType.SEARCH_MOVIE_REQUEST })
+    axios
+    .get(`https://api.themoviedb.org/3/search/multi?api_key=${API_KEYS}&language=en-US&page=1&query=${search}&include_adult=true`)
+    .then((res: AxiosResponse) => dispatch({ type: ActionType.SEARCH_MOVIE_SUCCESS, payload: res['data']['results'] }))
+    .catch(err => dispatch({ type: ActionType.SEARCH_MOVIE_FAIL, payload: err }))
+}
