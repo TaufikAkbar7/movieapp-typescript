@@ -60,6 +60,9 @@ const SearchMovie: FC<RouteComponentProps<IMatchParams>> = (props) => {
               </Row>
             </div>
           </Content>
+          <Footer style={{ background: "#001529" }}>
+            <FooterComp />
+          </Footer>
         </Layout>
       ) : loading ? (
         <div

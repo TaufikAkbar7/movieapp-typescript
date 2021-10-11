@@ -11,7 +11,7 @@ import {
 import { Layout, Image, Spin, Card, Button } from "antd";
 import { StarOutlined, StarFilled, ArrowLeftOutlined } from "@ant-design/icons";
 import Stars from "react-rating";
-import { Cards, Gap, Title } from "../components";
+import { Cards, Gap, Title, FooterComp } from "../components";
 import Slider from "@ant-design/react-slick";
 import { useHistory } from "react-router";
 
@@ -45,10 +45,10 @@ const DetailMovie: FC<RouteComponentProps<IMatchParams>> = (props) => {
   }, [dispatch, id]);
 
   return (
-    <Layout>
-      <Content style={{ background: "#001529" }}>
-        {detailMovie && movie && casts ? (
-          <>
+    <>
+      {detailMovie && movie && casts ? (
+        <Layout>
+          <Content style={{ background: "#001529" }}>
             <div style={{ height: "100vh", background: "red" }}>
               <Image
                 style={{ objectFit: "cover", height: 663 }}
@@ -217,23 +217,26 @@ const DetailMovie: FC<RouteComponentProps<IMatchParams>> = (props) => {
                 ))}
               </Slider>
             </div>
-          </>
-        ) : loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <Spin size="large" />
-          </div>
-        ) : (
-          <>{console.log(error)}</>
-        )}
-      </Content>
-    </Layout>
+          </Content>
+          <Footer style={{ background: "#001529" }}>
+            <FooterComp />
+          </Footer>
+        </Layout>
+      ) : loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      ) : (
+        <>{console.log(error)}</>
+      )}
+    </>
   );
 };
 
