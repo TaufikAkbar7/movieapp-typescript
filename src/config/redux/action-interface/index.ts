@@ -74,4 +74,32 @@ interface MovieSearchFail {
     payload: string
 }
 
-export type Action = MoviCarouselRequest | MovieCarouselSuccess | MovieCarouselFail | MovieDetailRequest | MovieDetailSuccess | MovieDetailFail | MoviePopularRequest | MoviePopularSuccess | MoviePopularFail | MovieSearchRequest | MovieSearchSuccess | MovieSearchFail | MovieTopRatedRequest | MovieTopRatedSuccess | MovieTopRatedFail
+interface MovieSimilarRequest {
+    type: ActionType.MOVIE_SIMILAR_REQUEST,
+}
+
+interface MovieSimilarSuccess {
+    type: ActionType.MOVIE_SIMILAR_SUCCESS,
+    payload: array
+}
+
+interface MovieSimilarFail {
+    type: ActionType.MOVIE_SIMILAR_FAIL,
+    payload: string
+}
+
+interface MovieCastRequest {
+    type: ActionType.MOVIE_CAST_REQUEST,
+}
+
+interface MovieCastSuccess {
+    type: ActionType.MOVIE_CAST_SUCCESS,
+    payload: array
+}
+
+interface MovieCastFail {
+    type: ActionType.MOVIE_CAST_FAIL,
+    payload: string
+}
+
+export type Action = MovieCastRequest | MovieCastSuccess | MovieCastFail | MovieSimilarRequest | MovieSimilarSuccess | MovieSimilarFail | MoviCarouselRequest | MovieCarouselSuccess | MovieCarouselFail | MovieDetailRequest | MovieDetailSuccess | MovieDetailFail | MoviePopularRequest | MoviePopularSuccess | MoviePopularFail | MovieSearchRequest | MovieSearchSuccess | MovieSearchFail | MovieTopRatedRequest | MovieTopRatedSuccess | MovieTopRatedFail

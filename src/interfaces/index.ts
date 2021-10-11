@@ -45,14 +45,24 @@ export interface IGap {
 }
 
 export interface IMatchParams {
+    id: string;
     name: string;
 }
 
 export interface IDetailMovie {
+    name: string;
     backdrop_path: string;
+    poster_path: string;
     genre_ids : number[];
     original_name: string;
     release_date: string;
     vote_average: number;
     overview: string;
+}
+
+export interface ICastMovie {
+    name: string;
+    original_name: string;
+    profile_path: string | null;
+    character: string;
 }

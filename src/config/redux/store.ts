@@ -4,7 +4,10 @@ import {
     movieCarouselReducer, 
     popularMovieReducer, 
     topRatedMovieReducer,
-    searchMovieReducer 
+    searchMovieReducer,
+    detailMovieReducer, 
+    similarMovieReducer,
+    castMovieReducer,
 } from './reducers'
 
 declare global {
@@ -17,7 +20,10 @@ const reducers = combineReducers({
     movieCarousel: movieCarouselReducer,
     popularMovie: popularMovieReducer,
     topRatedMovie: topRatedMovieReducer,
-    searchMovie: searchMovieReducer
+    searchMovie: searchMovieReducer,
+    detailMovie: detailMovieReducer,
+    similarMovie: similarMovieReducer,
+    castMovie: castMovieReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

@@ -9,7 +9,7 @@ const routes: IRoute[] = [
         exact: true
     },
     {
-        path: '/detail',
+        path: '/detail/:id',
         name: 'DetailMovie',
         component: DetailMovie,
         exact: true
